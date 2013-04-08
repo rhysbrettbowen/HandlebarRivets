@@ -1,0 +1,6 @@
+<ul>
+	{{#each names}}
+		<li>{{item}}</li>
+	{{/each}}
+</ul>
+<div class='normal {{#if beatle}}beatles{{/if}}'>{{{name}}}&nbsp;{{#if beatle}}is a Beatle{{else}}{{#if inBand}}is in the {{band}}{{else}}is a nobody{{/if}}{{/if}}</div>

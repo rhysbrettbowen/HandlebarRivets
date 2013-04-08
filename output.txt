@@ -1,0 +1,472 @@
+########## first pass tree ##########
+|---FragmentNode: 
+|   |---TextNode:     
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: short-criteria
+|   |   |---TextNode:         
+|   |   |---ControlTemplateNode: if
+model.tickers.all
+|   |   |   |---TextNode:         
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-company
+|   |   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |   |---ControlTemplateNode: if
+model.hasSectors
+|   |   |   |   |   |   |   |---TextNode: has-sector
+|   |   |   |   |---TextNode:                 
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: tickers-sym
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---ControlTemplateNode: each
+model.tickers.all
+|   |   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |---TextNode: name
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |---TextNode:         
+|   |   |   |---TextNode:         
+|   |   |   |---ElseNode: else
+|   |   |   |---TextNode:         
+|   |   |   |---ControlTemplateNode: if
+model.hasSectors
+|   |   |   |   |---TextNode:         
+|   |   |   |   |---ElementNode: div
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: stream-company
+|   |   |   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |   |   |---TextNode: has-sector
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: sectors-sym
+|   |   |   |   |   |   |   |---AttributeNode: title
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---ControlTemplateNode: each
+model.sectors.requested
+|   |   |   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |   |   |   |---TextNode: sector
+|   |   |   |   |   |   |   |   |   |   |---TextNode: &#013;
+|   |   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |   |---ControlTemplateNode: each
+model.sectors.requested
+|   |   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |   |---TextNode: sector-name
+|   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |   |---TextNode: name
+|   |   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---TextNode:         
+|   |   |   |   |---TextNode:         
+|   |   |   |---TextNode:         
+|   |   |---TextNode:         
+|   |   |---ControlTemplateNode: if
+model.hasNonTickerCo
+|   |   |   |---TextNode:         
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-company
+|   |   |   |   |---ControlTemplateNode: each
+model.nonTickerCo
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: stream-item-tkr-sym
+|   |   |   |   |   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |   |   |   |   |---TextNode: non-tkr
+|   |   |   |   |   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |   |   |   |   |---TextNode: internal-link
+|   |   |   |   |   |   |   |---AttributeNode: data-tid
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |   |   |---TextNode: id
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |---TextNode: name
+|   |   |   |---TextNode:         
+|   |   |---TextNode:         
+|   |   |---ControlTemplateNode: if
+model.hasCustom
+|   |   |   |---TextNode:         
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-custom
+|   |   |   |   |---TextNode:           
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---TextNode:             
+|   |   |   |   |   |---ControlTemplateNode: each
+model.custom
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: user-name
+|   |   |   |   |   |   |   |---TextNode: @
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |---TextNode: name
+|   |   |   |   |   |---TextNode:           
+|   |   |   |   |---TextNode:         
+|   |   |   |---TextNode:         
+|   |   |---TextNode:         
+|   |   |---ControlTemplateNode: if
+model.topics
+|   |   |   |---TextNode:         
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-topic
+|   |   |   |   |---TextNode:                 
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: topic-sym
+|   |   |   |   |   |   |---AttributeNode: title
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |   |   |---TextNode: topics
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: topic-name
+|   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |   |---TextNode: topics
+|   |   |   |   |   |---TextNode:                 
+|   |   |   |   |---TextNode:         
+|   |   |   |---TextNode:         
+|   |   |---TextNode:     
+|   |---TextNode: 
+
+
+########## cleaned tree ##########
+
+
+|---FragmentNode: 
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: short-criteria
+|   |   |---ControlTemplateNode: if
+model.tickers.all
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-company 
+|   |   |   |   |   |   |---ControlTemplateNode: if
+model.hasSectors
+|   |   |   |   |   |   |   |---TextNode: has-sector
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: tickers-sym
+|   |   |   |   |   |---ControlTemplateNode: each
+model.tickers.all
+|   |   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |   |---ElseNode: else
+|   |   |   |---ControlTemplateNode: if
+model.hasSectors
+|   |   |   |   |---ElementNode: div
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: stream-company has-sector
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: sectors-sym
+|   |   |   |   |   |   |   |---AttributeNode: title
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---ControlTemplateNode: each
+model.sectors.requested
+|   |   |   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |   |   |---TextNode: model.sector
+|   |   |   |   |   |   |   |   |   |   |---TextNode: &#013;
+|   |   |   |   |   |   |---ControlTemplateNode: each
+model.sectors.requested
+|   |   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |   |---TextNode: sector-name
+|   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ControlTemplateNode: if
+model.hasNonTickerCo
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-company
+|   |   |   |   |---ControlTemplateNode: each
+model.nonTickerCo
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: stream-item-tkr-sym non-tkr internal-link
+|   |   |   |   |   |   |   |---AttributeNode: data-tid
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |   |---TextNode: model.id
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ControlTemplateNode: if
+model.hasCustom
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-custom
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---ControlTemplateNode: each
+model.custom
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: user-name
+|   |   |   |   |   |   |   |---TextNode: @
+|   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ControlTemplateNode: if
+model.topics
+|   |   |   |---ElementNode: div
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stream-topic
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: topic-sym
+|   |   |   |   |   |   |---AttributeNode: title
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.topics
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: topic-name
+|   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |---TextNode: model.topics
+
+
+########## finished tree ##########
+
+
+|---FragmentNode: 
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: short-criteria
+|   |   |---ElementNode: div
+|   |   |   |---AttributeNode: class
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stream-company 
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: data-show
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.hasSectors
+|   |   |   |   |   |   |---TextNode: has-sector
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.tickers.all
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |---ElementNode: a
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: tickers-sym
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: data-each-model
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: model.tickers.all
+|   |   |   |   |   |---ElementNode: a
+|   |   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: data-text
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ElementNode: div
+|   |   |   |---AttributeNode: class
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stream-company has-sector
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.hasSectors && model.tickers.all
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: sectors-sym
+|   |   |   |   |   |---AttributeNode: title
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---ControlTemplateNode: each
+model.sectors.requested
+|   |   |   |   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.sector
+|   |   |   |   |   |   |   |   |---TextNode: &#013;
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: data-each-model
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: model.sectors.requested
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: sector-name
+|   |   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |   |---AttributeNode: data-text
+|   |   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ElementNode: div
+|   |   |   |---AttributeNode: class
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stream-company
+|   |   |   |---AttributeNode: data-each-model
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.nonTickerCo
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.hasNonTickerCo
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: tkr-sym
+|   |   |   |   |---ElementNode: a
+|   |   |   |   |   |---AttributeNode: href
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: stream-item-tkr-sym non-tkr internal-link
+|   |   |   |   |   |---AttributeNode: data-attr-data-tid
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: model.id
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: data-text
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ElementNode: div
+|   |   |   |---AttributeNode: class
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stream-custom
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.hasCustom
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |---AttributeNode: data-each-model
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: model.custom
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: user-name
+|   |   |   |   |   |---TextNode: @
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: data-text
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.name
+|   |   |---ElementNode: div
+|   |   |   |---AttributeNode: class
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stream-topic
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.topics
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: criteria
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: topic-sym
+|   |   |   |   |   |---AttributeNode: data-attr-title
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: model.topics
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---AttributeNode: class
+|   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |---TextNode: topic-name
+|   |   |   |   |   |---ElementNode: span
+|   |   |   |   |   |   |---AttributeNode: data-text
+|   |   |   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |   |   |---TextNode: model.topics
+<div class="short-criteria" ><div class="stream-company <span data-show='model.hasSectors' >has-sector</span>" data-show='model.tickers.all' ><span class="criteria" ><a class="tickers-sym" ></a><span data-each-model='model.tickers.all' ><a href="" class="tkr-sym" ><span data-text='model.name' ></span></a></span></span></div><div class="stream-company has-sector" data-show='model.hasSectors && model.tickers.all' ><span class="criteria" ><span class="sectors-sym" title="{{#each}}{T}model.sector{/T}&#013;{{/each}}" ></span><span data-each-model='model.sectors.requested' ><span class="sector-name" ><span data-text='model.name' ></span></span></span></span></div><div class="stream-company" data-each-model='model.nonTickerCo' data-show='model.hasNonTickerCo' ><span class="tkr-sym" ><a href="" class="stream-item-tkr-sym non-tkr internal-link" data-attr-data-tid="model.id" ><span data-text='model.name' ></span></a></span></div><div class="stream-custom" data-show='model.hasCustom' ><span class="criteria" data-each-model='model.custom' ><span class="user-name" >@<span data-text='model.name' ></span></span></span></div><div class="stream-topic" data-show='model.topics' ><span class="criteria" ><span class="topic-sym" data-attr-title="model.topics" ></span><span class="topic-name" ><span data-text='model.topics' ></span></span></span></div></div>
