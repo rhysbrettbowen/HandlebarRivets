@@ -2,9 +2,10 @@ var fs = require('fs');
 var util = require('util');
 
 
-
+// tokens
 var tokens = [/{{\s*else\s*}}/i, '{{{', '}}}', '{{#', '{{/', '{{', '}}', '</', '<', '/>', '>', '\'', '"', '=', /\s+/];
 
+// elements that don't have children
 var selfClose = [
 	'hr',
 	'img',
@@ -12,19 +13,36 @@ var selfClose = [
 	'br'
 ];
 
+// save the derived functions
+var custom = {};
+// to help create derived function names
+custFN = 0;
+
+/****************
+** CREATE TREE **
+****************/
+
+// take the HTML and return a transformed tree
 var parseHtml = function(str) {
+	str = cleanString(str);
 	var head = buildTree(str);
 	// console.log('########## first pass tree ##########');
 	// printTree(head);
 	cleanTree(head);
 	// console.log('\n\n########## cleaned tree ##########\n\n');
 	// printTree(head);
+	// console.log(attrFn(head.children[0].attrs[0]));
 	transformBindings(head);
 	// console.log('\n\n########## finished tree ##########\n\n');
 	// printTree(head);
 	return head;
 };
 
+var cleanString = function(str) {
+	return str.replace(/{{\s+/g, '{{').replace(/\s+}}/g, '}}');
+};
+
+// get the next toek in a string
 var getNextToken = function(str) {
 	var ind = Infinity;
 	var tok = null;
@@ -42,17 +60,20 @@ var getNextToken = function(str) {
 	return ind ? str.substring(0, ind) : tok;
 };
 
+// splits the string up in to tokens and changes to a tree
 var buildTree = function(str) {
 	var head = new FragmentNode();
 	var node = head;
 	while(str.length) {
 		var token = getNextToken(str);
 		str = str.substring(token.length);
+		var temp = node;
 		node = node.handleToken(token);
 	};
 	return head;
 };
 
+// prints a tree
 var printTree = function(node, level) {
 	level = level || 0;
 	var str = '';
@@ -68,6 +89,7 @@ var printTree = function(node, level) {
 		printTree(node.children[i], level + 1);
 };
 
+// will run a function from the leaves up
 var depthFirst = function(node, fn) {
 	if (node)
 		fn(node);
@@ -75,32 +97,32 @@ var depthFirst = function(node, fn) {
 		node.attrs.forEach(function(child) {
 			depthFirst(child, fn);
 		});
+  if (!node.children)
+    return;
 	node.children.forEach(function(child) {
 		depthFirst(child, fn);
 	});
 };
 
+// cleans the tree after initial pass
 var cleanTree = function(head) {
 	depthFirst(head, mergeTextChildren);
 	depthFirst(head, removeBlankTextChildren);
 	return head;
 };
 
-var transformBindings = function(head) {
-	depthFirst(head, putTemplatesInEls);
-	depthFirst(head, putEachInEls);
-	depthFirst(head, handleEach);
-	depthFirst(head, addBindForOnlyTempate);
-	depthFirst(head, addInIf);
-};
-
+// remove null nodes
 var removeBlankTextChildren = function(node) {
 	node.children = node.children.filter(function(child) {
 		if (!(child instanceof TextNode)) return true;
-		return !!child.val.replace(/^\s+|\s+$/g, '').length;
+		if (!child.val.replace(/\s/g, '').length && child.val.indexOf('\n') > -1)
+			return false;
+    child.val = child.val.replace(/[\n\r\t]/g, '').replace(/\s+/g, ' ');
+		return !!child.val.length;
 	});
 };
 
+// HTMLerize whitespace
 var mergeTextChildren = function(node) {
 	var child = node.firstChild();
 	while (child) {
@@ -112,104 +134,232 @@ var mergeTextChildren = function(node) {
 	}
 };
 
+// special transforms to handle templates
+var transformBindings = function(head) {
+  depthFirst(head, putNecessaryEls);
+  // depthFirst(head, putEachTemplatesInEls);
+	depthFirst(head, addBindForOnlyTempate);
+  depthFirst(head, addInIf);
+  depthFirst(head, putEachInEls);
+  depthFirst(head, handleEach);
+  // depthFirst(head, removeElse);
+  // depthFirst(head, handleComputedNodes);
+};
+
+var putEachTemplatesInEls = function(node) {
+	if (!node instanceof TemplateNode) return;
+	if (inString(node)) return;
+	if (!isInEach(node)) return;
+	if (node.parent.children.length <= 1) return;
+	putInElement(node, 'span');
+};
+
+// puts the each control in a span element
 var putEachInEls = function(node) {
 	if (node instanceof ControlTemplateNode &&
-			node.val == 'each' &&
-			(node.prevSibling() || node.nextSibling()))
-		putInElement(node, 'span');
-};
-
-var putTemplatesInEls = function(node) {
-	if (node instanceof TemplateNode &&
-			!node.isIn(AttributeNode) &&
-			(!(node.prevSibling() instanceof ElementNode) ||
-				!(node.nextSibling() instanceof ElementNode))) {
+      !inString(node) &&
+      node.val == 'each' &&
+      node.containsType(ElementNode) &&
+      !(node.parent instanceof ElementNode)) {
 		putInElement(node, 'span');
 	}
 };
 
+// will set the attribute for an each
 var handleEach = function(node) {
-	if (node instanceof ControlTemplateNode &&
-			!inString(node) &&
-			node.val == 'each') {
-		node.parent.attrs.push(makeAttritbue('data-each-model', node.test));
-		node.flatten();
-	}
+  if (node instanceof ControlTemplateNode &&
+      !inString(node) &&
+      node.val == 'each' &&
+      node.containsType(ElementNode)) {
+  	if ((!(node.parent instanceof ElementNode) ||
+  			node.parent.children.length > 1)) {
+  		putInElement(node, 'span');
+  	}
+  	if (node.parent instanceof ElementNode) {
+	    node.parent.attrs.push(makeAttritbue('data-each-this', 'm.' + node.test));
+	    node.flatten();
+	  }
+  }
 };
 
+// removes an else node
+var removeElse = function(node) {
+  if (node instanceof ElseNode)
+    node.remove();
+};
+
+// wraps fragments in spans if needed
+var putNecessaryEls = function(node) {
+
+  if (!(node instanceof ElementNode))
+    return;
+  if (node.children.length <= 1)
+  	return;
+  if (!node.containsType(ElementNode))
+  	return;
+
+  var ind = 0;
+  var newChildren = [];
+  var oldChildren = node.children.slice(0);
+
+  while(ind < oldChildren.length) {
+  	var newEl = new ElementNode();
+  	newEl.val = 'span';
+  	newEl.parent = node;
+
+	  while(oldChildren[ind] && (oldChildren[ind] instanceof ElementNode ||
+		  	oldChildren[ind].containsType(ElementNode))) {
+	  	if (!(oldChildren[ind] instanceof ElementNode)) {
+	  		newEl.addChild(oldChildren[ind]);
+		  	newChildren.push(newEl);
+		  	newEl = new ElementNode('span');
+		  	newEl.val = 'span';
+		  	newEl.parent = node;
+	  	} else {
+		  	newChildren.push(oldChildren[ind]);
+		  }
+		  ind++;
+	  }
+
+	  while(oldChildren[ind] && !(oldChildren[ind] instanceof ElementNode) && !oldChildren[ind].containsType(ElementNode)) {
+	  	newEl.addChild(oldChildren[ind]);
+	 		ind++;
+	  }
+	  newChildren.push(newEl)
+	};
+
+	if (!newChildren[newChildren.length - 1].children.length)
+		newChildren.pop();
+
+	node.children = newChildren;
+
+};
+
+// handles simple case of a template as the only child of an element
 var addBindForOnlyTempate = function(node) {
-	if (node instanceof ElementNode &&
-			node.children.length == 1 &&
-			node.children[0] instanceof TemplateNode) {
-		node.attrs.push(makeAttritbue('data-' + (node.children[0].triple ? 'html' : 'text'), node.children[0].children[0]));
-		node.children[0].remove();
-	}
+  if (node instanceof ElementNode &&
+      node.children.length == 1 &&
+      node.children[0] instanceof TemplateNode) {
+  	if (node.children[0].children[0].val != "this" && !isInEach(node))
+	  	node.children[0].children[0].val = 'm.' + node.children[0].children[0].val;
+    else if (node.children[0].children[0].val != "this" && isInEach(node))
+    	node.children[0].children[0].val = 'this.' + node.children[0].children[0].val;
+    node.attrs.push(makeAttritbue('data-' + (node.children[0].triple ? 'html' : 'text'), node.children[0].children[0]));
+    node.children[0].remove();
+  }
 
-	if (node instanceof QuotedNode &&
-			node.children.length == 1 &&
-			node.children[0] instanceof TemplateNode) {
-		var el = node.parent.parent;
-		var attr = new AttributeNode('data-attr-' + node.parent.val);
-		var temp = [];
-		for (var i = 0; i < el.attrs.length; i++) {
-			if (el.attrs[i] != node.parent)
-				temp.push(el.attrs[i]);
-		}
-		el.attrs = temp;
-		var text = new TextNode(node.children[0].children[0].val);
-		node.children[0].remove();
-		node.addChild(text);
-		attr.addChild(node);
-		el.attrs.push(attr);
-	}
+  if (node instanceof QuotedNode &&
+      node.children.length == 1 &&
+      node.children[0] instanceof TemplateNode) {
+    var el = node.parent.parent;
+    var attr = new AttributeNode('data-attr-' + node.parent.val);
+    var temp = [];
+    for (var i = 0; i < el.attrs.length; i++) {
+      if (el.attrs[i] != node.parent)
+        temp.push(el.attrs[i]);
+    }
+    el.attrs = temp;
+    var text = new TextNode('m.' + getKeypath(node) + node.children[0].children[0].val);
+    node.children[0].remove();
+    node.addChild(text);
+    attr.addChild(node);
+    el.attrs.push(attr);
+  }
 };
 
+// handles the IF
 var addInIf = function(node) {
-	var head = node;
-	for (var i = 0; i < head.children.length; i++) {
-		node = head.children[i];
-		if (node instanceof ControlTemplateNode && node.val == 'if') {
-			if (!inString(node)) {
-				node.children.forEach(function(child) {
-					if(child instanceof TextNode)
-						putInElement(child, 'span');
-					if (child instanceof ControlTemplateNode &&
-							child.val == 'if')
-						putInElement(child, 'span');
-					if (child instanceof TemplateNode)
-						putInElement(child, 'span');
-					addBindForOnlyTempate(child.parent);
-				});
-				var elseFound = null;
-				node.children.forEach(function(child) {
-					if (child instanceof ElseNode) {
-						elseFound = child;
-						return;
-					}
-					var attr = new AttributeNode();
-					attr.val = 'data-' + (elseFound ? 'hide' : 'show');
-					var q = new QuotedNode("'");
-					var test = new TextNode(node.test);
-					attr.addChild(q);
-					q.addChild(test);
-					child.attrs.push(attr);
-				});
-				if (elseFound)
-					elseFound.remove();
-				node.flatten();
-				i--;
-			} else {
-				var el = head.parent.parent;
-				if (head.parent.val == 'class') {
-					el.attrs.push(makeAttritbue('data-class-' + node.children[0].print(), node.test));
-					head.children.splice(head.children.indexOf(node), 1);
-				}
+  var head = node;
+  for (var i = 0; i < head.children.length; i++) {
+    node = head.children[i];
+    if (node instanceof ControlTemplateNode && node.val == 'if' && node.containsType(ElementNode)) {
+      if (!inString(node)) {
+        node.children.forEach(function(child) {
+          if(child instanceof TextNode)
+            putInElement(child, 'span');
+          if (child instanceof ControlTemplateNode)
+            putInElement(child, 'span');
+          if (child instanceof TemplateNode)
+            putInElement(child, 'span');
+          addBindForOnlyTempate(child.parent);
+        });
+        var elseFound = null;
+        node.children.forEach(function(child) {
+          if (child instanceof ElseNode) {
+            elseFound = child;
+            return;
+          }
+          var attr = new AttributeNode();
+          attr.val = 'data-' + (elseFound ? 'hide' : 'show');
+          var q = new QuotedNode("'");
+          var test = new TextNode(node.test);
+          attr.addChild(q);
+          q.addChild(test);
+          child.attrs.push(attr);
+        });
+        if (elseFound)
+          elseFound.remove();
+        node.flatten();
+        i--;
+      } else {
+        var el = head.parent.parent;
+        if (head.parent.val == 'class' && node.children.length == 1 &&
+            node.children[0] instanceof TextNode) {
+          el.attrs.push(makeAttritbue('data-class-' + node.children[0].print(), node.test));
+          head.children.splice(head.children.indexOf(node), 1);
+        }
 
-			}
-		}
-	}
+      }
+    }
+  }
 };
 
+/**************
+** UTILITIES **
+**************/
+
+// wheter we're in an each node
+var isInEach = function(node) {
+	while (node.parent) {
+		if (node.parent &&
+				node.parent instanceof ControlTemplateNode &&
+				node.parent.val == 'each')
+			return true;
+		if (node.parent.attrs &&
+				node.parent.attrs.reduce(function(memo, attr) {
+					return memo || attr.val == 'data-each-this';
+				}, false))
+			return true;
+		node = node.parent;
+	}
+	return false;
+};
+
+// the keypath created by each nodes
+var getKeypath = function(node) {
+	var findeach = function(arr) {
+		return arr.reduce(function(memo, attr) {
+			return memo || (attr.val == 'data-each-this' ? attr : undefined);
+		}, undefined);
+	};
+
+	var path = [];
+	while (node.parent) {
+		if (node.parent &&
+				node.parent instanceof ControlTemplateNode &&
+				node.parent.val == 'each')
+			path.push(node.test);
+		if (node.parent.attrs &&
+				node.parent.attrs.reduce(function(memo, attr) {
+					return memo || attr.val == 'data-each-this';
+				}, false))
+			path.push(findeach(node.parent.attrs).children[0].children[0].print().replace(/^m\./, ''));
+		node = node.parent;
+	}
+	return path.filter(function(str) {return str != 'this';}).reverse().join('.');
+};
+
+// place a node in an element
 var putInElement = function(node, element, attrs) {
 	var el = new ElementNode();
 	el.val = element;
@@ -225,14 +375,17 @@ var putInElement = function(node, element, attrs) {
 	node.parent.children.splice(node.parent.children.indexOf(node), 0, el);
 	el.parent = node.parent;
 	el.addChild(node);
+  return el;
 };
 
+// whether a node is in a (attribute) string
 var inString = function(node) {
 	while (node.parent && !(node instanceof QuotedNode))
 		node = node.parent
 	return node instanceof QuotedNode;
 };
 
+// create an attribute node
 var makeAttritbue = function(name, text) {
 	var attr = new AttributeNode();
 	attr.val = name;
@@ -244,6 +397,11 @@ var makeAttritbue = function(name, text) {
 	return attr;
 };
 
+/**********
+** NODES **
+**********/
+
+// Base node to inherit from
 var Node = function Node() {
 	this.val = '';
 	this.parent = null;
@@ -254,10 +412,12 @@ Node.prototype.setVal = function(val) {
 	this.val = val;
 };
 
+// nodes handle the next token passed to them
 Node.prototype.handleToken = function(tok) {
 	throw new Error('should not call');
 };
 
+// when adding a child change it's parent
 Node.prototype.addChild = function(child) {
 	if (this.children.indexOf(child) < 0)
 		this.children.push(child);
@@ -280,6 +440,13 @@ Node.prototype.nextSibling = function() {
 	return this.parent.children[this.parent.children.indexOf(this) + 1];
 };
 
+Node.prototype.prevSibling = function() {
+	if (!this.parent)
+		return;
+	return this.parent.children[this.parent.children.indexOf(this) - 1];
+};
+
+// can remove the node and add it's children to the parent
 Node.prototype.flatten = function() {
 	this.children.forEach(function(child) {
 		this.parent.children.splice(this.parent.children.indexOf(this), 0, child);
@@ -288,33 +455,37 @@ Node.prototype.flatten = function() {
 	this.remove();
 };
 
-Node.prototype.prevSibling = function() {
-	if (!this.parent)
-		return;
-	return this.parent.children[this.parent.children.indexOf(this) - 1];
-};
-
 Node.prototype.firstChild = function() {
 	return this.children[0];
 };
 
+// removing a node removes it from it's parent
 Node.prototype.remove = function() {
 	if (!this.parent)
 		return;
 	this.parent.children.splice(this.parent.children.indexOf(this), 1);
 };
 
+// the HTML output for the node
 Node.prototype.print = function() {
 	return this.children.reduce(function(memo, child) {
 		return memo + child.print();
 	}, '');
 };
 
+// test it the node is in a certain type
 Node.prototype.isIn = function(type) {
 	var node = this;
 	while (node.parent && !(node.parent instanceof type))
 		node = node.parent;
 	return node.parent instanceof type;
+};
+
+// test if a certain type is in the node
+Node.prototype.containsType = function(type) {
+	return this.children.reduce(function(memo, child) {
+		return memo || child instanceof type || child.containsType(type);
+	}, false);
 };
 
 /**
@@ -386,7 +557,6 @@ ElseNode.prototype.print = function() {
  */
 var TemplateNode = function TemplateNode(tok) {
 	Node.call(this);
-	this.addChild(new TextNode('model.'));
 };
 util.inherits(TemplateNode, Node);
 
@@ -479,19 +649,21 @@ EndElementNode.prototype.print = function() {
 	return '</ ' + this.val + '>';
 };
 
-
+/**
+ * Ifs and Elses
+ */
 ControlTemplateNode = function ControlTemplateNode() {
 	ElementNode.call(this);
 	this.selfClose = false;
 	this.skipSpace = false;
 };
-util.inherits(ControlTemplateNode, ElementNode);
+util.inherits(ControlTemplateNode, Node);
 
 ControlTemplateNode.prototype.setVal = function(val) {
 	if (selfClose.indexOf(val) > -1)
 		this.selfClose = true;
 	this.val = val;
-	this.test = 'model.';
+	this.test = '';
 	this.inEl = true;
 	if (val == 'else') {
 		return this.parent;
@@ -521,6 +693,22 @@ ControlTemplateNode.prototype.handleToken = function(tok) {
 	return FragmentNode.prototype.handleToken.call(this, tok);
 };
 
+ControlTemplateNode.prototype.getElseIndex = function() {
+	var isElse = function(node) {return node instanceof ElseNode};
+	var ind = 0;
+	while (ind < this.children.length && !isElse(this.children[ind]))
+		ind++;
+	return ind;
+}
+
+ControlTemplateNode.prototype.getTrueChildren = function() {
+	return this.children.slice(0, this.getElseIndex());
+};
+
+ControlTemplateNode.prototype.getFalseChildren = function() {
+	return this.children.slice(this.getElseIndex() + 1);
+};
+
 ControlTemplateNode.prototype.print = function() {
 	return '{{#' + this.val + '}}' +
 	this.children.reduce(function(memo, child) {
@@ -529,7 +717,7 @@ ControlTemplateNode.prototype.print = function() {
 };
 
 /**
- * a node that marks the end of the element
+ * a node that marks the end of the if or else
  */
 var EndControlTemplateNode = function EndControlTemplateNode(parent) {
 	Node.call(this);
@@ -573,12 +761,17 @@ AttributeNode.prototype.handleToken = function(tok) {
 };
 
 AttributeNode.prototype.print = function() {
+	if (this.containsType(TemplateNode) || this.containsType(ControlTemplateNode))
+		this.val = 'data-' + this.val;
 	return this.val + (this.children.length ? '=' : '') +
 		this.children.reduce(function(memo, child) {
 			return memo + child.print();
 		}, '') + ' ';
 };
 
+/**
+ * contains a string
+ */
 var QuotedNode = function QuotedNode(val) {
 	this.quote = val;
 	Node.call(this);
@@ -605,18 +798,160 @@ QuotedNode.prototype.handleToken = function(tok) {
 };
 
 QuotedNode.prototype.print = function() {
-	return this.quote +
-		this.children.reduce(function(memo, child) {
-			return memo + child.print();
-		}, '') +
-		this.quote;
+	if (this.children.length == 1)
+		return this.quote +
+			this.children.reduce(function(memo, child) {
+				return memo + child.print();
+			}, '') +
+			this.quote;
 };
 
+// adds in custom node for elements
+var handleComputedNodes = function(node, req) {
+  if (!(node instanceof ElementNode))
+    return;
+  if (node.containsType(ElementNode))
+    return;
+  if (node.children.length <= 1 &&
+    !(node.children[0] instanceof ControlTemplateNode))
+    return;
+  var req = [];
+  var fnInternal = printQS(node, req);
+  req = req.reduce(function(memo, req) {
+  	if (memo.indexOf(req) == -1)
+  		memo.push(req);
+  	return memo;
+  }, []);
+  var fnName = addToCustom(fnInternal, req.map(function(a) {return a.replace(/^this\.?/, '');}));
+  node.attrs.push(makeAttritbue('data-html', 'c:' + fnName + ' <' + req.map(function(prop) {return ' ' + (prop.match(/this\.?/) ?  prop: (isInEach(node) ? 'this.' : 'm.') + prop);}).join('')));
+  node.children = [];
+};
+
+// adds in custom function for attributes
+var attrFn = function(node) {
+	if (node instanceof ElementNode) {
+		node.attrs.forEach(function(node) {
+			if (node.children[0].children.length == 1)
+				return;
+			var fnName = node.parent.val.replace(/-/g, '') + (new Date()).getTime();
+			var req = [];
+			var str = printQS(node, req);
+
+		  var fnInternal = printQS(node, req);
+		  req = req.reduce(function(memo, req) {
+		  	if (memo.indexOf(req) == -1)
+		  		memo.push(req);
+		  	return memo;
+		  }, []);
+		  var fnName = addToCustom(fnInternal, req.map(function(a) {return a.replace(/^this\.?/, '');}));
+		  node.children[0].children = [new TextNode('c:' + fnName + ' <' + req.map(function(prop) {return ' ' + (prop.match(/this\.?/) ?  prop: (isInEach(node) ? 'this.' : 'm.') + prop);}).join(''))];
+		  node.val = 'data-attr-' + node.val;
+		})
+	};
+};
+
+var addToCustom = function(fnStr, args) {
+	args = args.map(function(arg) {
+		if (!arg) return 'that';
+		return arg;
+	});
+	for (var i in custom) {
+		if (custom[i] == 'function('+args.join(',')+'){return ' + fnStr + ';}')
+			return i;
+	}
+	var name = 'c' + (custFN++);
+	custom[name] = 'function('+args.join(',')+'){return ' + fnStr + ';}';
+	return name;
+};
+
+// works out hte current path
+var resolvePath = function(keypath, val) {
+	if (val && keypath)
+		val = keypath + '.' + val;
+	else if (!val)
+		val = keypath;
+	val = val.replace(/^this\./, '').replace(/\.this$/, '').replace(/\.this\./, '.');
+	return val;
+}
+
+// creates custom functions
+var printQS = function(node, required, inEach) {
+	keypath = getKeypath(node);
+	if (node instanceof TextNode) {
+		var val = node.val.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+		if (!(node.parent instanceof TemplateNode)) {
+			val = '"' + val + '"';
+		} else {
+			if (!inEach){
+				if (isInEach(node)) {
+					if (node.val == 'this') {
+						val = 'that';
+						required.push(node.val);
+					} else {
+						required.push('this.' + node.val);
+					}
+				} else {
+					required.push(keypath + node.val);
+				}
+			}
+		}
+		return val;
+	}
+	if (node instanceof ControlTemplateNode && node.val == 'if') {
+		if (!inEach) {
+			required.push(node.test);
+		}
+		return '(' + node.test + '?' +
+			node.getTrueChildren().reduce(function(memo, node) {
+				return memo.push(printQS(node, required, inEach, keypath)), memo;
+			}, ['""']).join('+') + ':' +
+			node.getFalseChildren().reduce(function(memo, node) {
+				return memo.push(printQS(node, required, inEach, keypath)), memo;
+			}, ['""']).join('+') + ')';
+	}
+	if (node instanceof ControlTemplateNode && node.val == 'each') {
+		if (!inEach) {
+			required.push(node.test);
+		}
+		var arr = resolvePath(keypath, node.test);
+		return arr + '.map(function(item){return ' +
+			node.children.reduce(function(memo, node) {
+				return memo.push(printQS(node, required, true, arr)), memo;
+			}, ['""']).join("+") +
+		';}).join("")';
+	}
+
+
+	return node.children.reduce(function(memo, node) {
+		return memo.push(printQS(node, required, inEach)), memo;
+	}, []).join("+");
+};
+
+// constructs the output
+var printFull = function(node) {
+	depthFirst(node, attrFn);
+	depthFirst(node, handleComputedNodes);
+	var str = 'getTemplate = (function(){var c={';
+	for (i in custom) {
+		str += i + ':' + custom[i] + ',';
+	}
+	str = str.replace(/,$/, '');
+	str += '};n=document.createElement("div"),f=document.createDocumentFragment();n.innerHTML="' +
+		node.print().replace(/"/g, '\\"') +
+		'";while(n.childNodes.length){f.appendChild(n.childNodes[0]);};' +
+		'return function(el,m){r=rivets.config.adapter.read;el.appendChild(f.cloneNode(true));return rivets.bind(el,{m:m,c:c});}})()';
+	console.log(str);
+}
+
+
+/**
+ * Entry point for program, reads files from command line
+ */
 process.argv.forEach(function(val, index) {
 	if (index < 2)
 		return;
 	fs.readFile(val, 'utf8', function(err, data) {
 		var node = parseHtml(data);
-		console.log("function getTemplate() { return '" + node.print().replace(/\\/g, '\\\\').replace(/'/g, "\\'") + "';};");
+		printFull(node);
 	});
 });
