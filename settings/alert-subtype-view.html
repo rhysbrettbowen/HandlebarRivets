@@ -1,0 +1,24 @@
+<div class="alert-filter-exp-container">
+    <div class="sensitivity-container cf">
+        <div class="filter-relevancy-container">
+            <span>Alert Frequency:</span>
+            <span class="relevancy-label"><a id="{{type}}-veryLow-rel" class="relevance-btn {{#if isVeryLow}} selected {{/if}}">Very Low</a></span> |
+            <span class="relevancy-label"><a id="{{type}}-low-rel" class="relevance-btn {{#if isLow}} selected {{/if}}">Low</a></span> |
+            <span class="relevancy-label"><a id="{{type}}-moderate-rel" class="relevance-btn {{#if isMed}} selected {{/if}}">Medium</a></span> |
+            <span class="relevancy-label"><a id="{{type}}-high-rel" class="relevance-btn {{#if isHigh}} selected {{/if}}">High</a></span> |
+            <span class="relevancy-label"><a id="{{type}}-veryHigh-rel" class="relevance-btn {{#if isVeryHigh}} selected {{/if}}">Very High</a></span>
+        </div>
+    </div>
+    <div class="alerting-subchannel-container">
+        {{#each subChannels}}
+            <div class="alerting-subchannel">
+                <input id="{{type}}-subchannel" class="alert-checkbox filter-check" type="checkbox" {{#if isSelected}} checked="checked" {{/if}} />
+                <label class="subchannel-label" style="background:{{ color }};" for="{{type}}-subchannel">{{ title }}</label>
+            </div>
+        {{/each}}
+    </div>
+</div>
+<!--div class="filter-postnews-container">
+    <input id="{{type}}-postNews" class="alert-checkbox pst-news-check" type="checkbox" {{#if isPostNews}} checked="checked" {{/if}} />
+    <label class="postNews-label main-label" for="{{type}}-postNews">Include News Articles</label>
+</div-->

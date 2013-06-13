@@ -1,0 +1,201 @@
+########## first pass tree ##########
+|---FragmentNode: 
+|   |---ElementNode: ul
+|   |   |---TextNode: 	
+|   |   |---ControlTemplateNode: each
+model.names
+|   |   |   |---TextNode: 		
+|   |   |   |---ElementNode: li
+|   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |---TextNode: this
+|   |   |   |---TextNode: 	
+|   |   |---TextNode: 
+|   |---TextNode: 
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: normal
+|   |   |   |   |---TextNode:  
+|   |   |   |   |---ControlTemplateNode: if
+model.beatle
+|   |   |   |   |   |---TextNode: beatles
+|   |   |---TemplateNode: 
+|   |   |   |---TextNode: model.
+|   |   |   |---TextNode: name
+|   |   |---TextNode:  
+|   |   |---ControlTemplateNode: if
+model.beatle
+|   |   |   |---TextNode: is
+|   |   |   |---TextNode:  
+|   |   |   |---TextNode: a
+|   |   |   |---TextNode:  
+|   |   |   |---TextNode: Beatle
+|   |   |   |---ElseNode: else
+|   |   |   |---ControlTemplateNode: if
+model.inBand
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---TextNode: is
+|   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |---TextNode: in
+|   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |---TextNode: the
+|   |   |   |   |   |---TextNode:  
+|   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |---TextNode: model.
+|   |   |   |   |   |   |---TextNode: band
+|   |   |   |   |---ElseNode: else
+|   |   |   |   |---TextNode: is
+|   |   |   |   |---TextNode:  
+|   |   |   |   |---TextNode: a
+|   |   |   |   |---TextNode:  
+|   |   |   |   |---TextNode: nobody
+|   |---TextNode: 
+
+
+########## cleaned tree ##########
+
+
+|---FragmentNode: 
+|   |---ElementNode: ul
+|   |   |---ControlTemplateNode: each
+model.names
+|   |   |   |---ElementNode: li
+|   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |---TextNode: model.this
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: normal 
+|   |   |   |   |---ControlTemplateNode: if
+model.beatle
+|   |   |   |   |   |---TextNode: beatles
+|   |   |---TemplateNode: 
+|   |   |   |---TextNode: model.name
+|   |   |---TextNode:  
+|   |   |---ControlTemplateNode: if
+model.beatle
+|   |   |   |---TextNode: is a Beatle
+|   |   |   |---ElseNode: else
+|   |   |   |---ControlTemplateNode: if
+model.inBand
+|   |   |   |   |---ElementNode: span
+|   |   |   |   |   |---TextNode: is in the 
+|   |   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |   |---TextNode: model.band
+|   |   |   |   |---ElseNode: else
+|   |   |   |   |---TextNode: is a nobody
+|---FragmentNode: 
+|   |---ElementNode: ul
+|   |   |---AttributeNode: data-each-model
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: model.names
+|   |   |---ElementNode: li
+|   |   |   |---AttributeNode: data-text
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.this
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: normal 
+|   |   |---AttributeNode: data-class-beatles
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: model.beatle
+|   |   |---ElementNode: span
+|   |   |   |---TemplateNode: 
+|   |   |   |   |---TextNode: model.name
+|   |   |   |---TextNode:  
+|   |   |---ElementNode: span
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.beatle
+|   |   |   |---TextNode: is a Beatle
+|   |   |   |---ElseNode: else
+|   |   |---ElementNode: span
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.beatle
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: data-show
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: model.inBand
+|   |   |   |   |---TextNode: is in the 
+|   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |---TextNode: model.band
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: data-show
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: model.inBand
+|   |   |   |   |---ElseNode: else
+|   |   |   |   |---TextNode: is a nobody
+
+
+########## finished tree ##########
+
+
+|---FragmentNode: 
+|   |---ElementNode: ul
+|   |   |---AttributeNode: data-each-model
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: model.names
+|   |   |---ElementNode: li
+|   |   |   |---AttributeNode: data-text
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.this
+|   |---ElementNode: div
+|   |   |---AttributeNode: class
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: normal 
+|   |   |---AttributeNode: data-class-beatles
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: model.beatle
+|   |   |---AttributeNode: data-html
+|   |   |   |---QuotedNode: 
+|   |   |   |   |---TextNode: stuff
+|   |   |---ElementNode: span
+|   |   |   |---AttributeNode: data-html
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stuff
+|   |   |   |---TemplateNode: 
+|   |   |   |   |---TextNode: model.name
+|   |   |   |---TextNode:  
+|   |   |---ElementNode: span
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.beatle
+|   |   |   |---AttributeNode: data-html
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stuff
+|   |   |   |---TextNode: is a Beatle
+|   |   |   |---ElseNode: else
+|   |   |---ElementNode: span
+|   |   |   |---AttributeNode: data-show
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: model.beatle
+|   |   |   |---AttributeNode: data-html
+|   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |---TextNode: stuff
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: data-show
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: model.inBand
+|   |   |   |   |---AttributeNode: data-html
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stuff
+|   |   |   |   |---TextNode: is in the 
+|   |   |   |   |---TemplateNode: 
+|   |   |   |   |   |---TextNode: model.band
+|   |   |   |---ElementNode: span
+|   |   |   |   |---AttributeNode: data-show
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: model.inBand
+|   |   |   |   |---AttributeNode: data-html
+|   |   |   |   |   |---QuotedNode: 
+|   |   |   |   |   |   |---TextNode: stuff
+|   |   |   |   |---ElseNode: else
+|   |   |   |   |---TextNode: is a nobody
+function(view) {
+
+var custom = {};
+this.$el.html("<ul data-each-model='model.names'><li data-text='model.this'></li></ul><div class='normal ' data-class-beatles='model.beatle' data-html='stuff'><span data-html='stuff'>{T}model.name{/T} </span><span data-show='model.beatle' data-html='stuff'>is a Beatle</span><span data-show='model.beatle' data-html='stuff'><span data-show='model.inBand' data-html='stuff'>is in the {T}model.band{/T}</span><span data-show='model.inBand' data-html='stuff'>is a nobody</span></span></div>");
+return rivets.bind(view.$el, {model: view.model, custom: custom});};

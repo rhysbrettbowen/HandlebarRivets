@@ -1,0 +1,14 @@
+<li class="multi-ticker-item">
+    <div class="tkr-symbol">
+        <span class="tile-container">{{ equitySymbol }}</span>
+    </div>
+    <div class="conflict-content">
+        {{#each conflicts}}
+                    <span class="conflict-co">
+                        <input class="multi-match-checkbox" type="checkbox" data-multi-id="{{mId}}" {{#if selected}}checked="checked"{{/if}}>
+                        <span class="tpc-exchange-code">{{exchangeCode}}</span>
+                        <span class="tpc-co-name">{{topicName}}</span>
+                    </span>
+        {{/each}}
+    </div>
+</li>

@@ -1,0 +1,47 @@
+<div class="intro">Enter a company by name or ticker</div>
+<div class="input-section">
+    <div class="notification-container">
+        <div class="bulk-notification"></div>
+    </div>
+    <div class="standard-input-container">
+        <div class="form-input-container">
+            <form method="POST" class="search-form">
+                <div class="company-query-input-container query-input-container">
+                    <div class="alert-search-input dm-inline-block"></div>
+                </div>
+                <input class="submit-btn settings-btn-2" type="submit" value="Add">
+            </form>
+        </div>
+        <div class="bulk-btn-container dm-inline-block"><button class="settings-btn bulk-btn">Bulk Import</button></div>
+    </div>
+    <div class="bulk-import-container" style="display:none;">
+        <div class="intro-2">Copy and paste a list of tickers to add them to your watchlist</div>
+
+        <div class="bulk-textarea-cont">
+            <textarea class="bulk-textarea"></textarea>
+        </div>
+        <div class="bulk-bnt-cont">
+            <span class="bulk-info"></span>
+            <button class="settings-btn cancel-bulk-btn">Cancel</button>
+            <button class="settings-btn upload-btn" >Add</button>
+        </div>
+    </div>
+</div>
+<div class="wl-description-section" >
+    <div class="wl-description-header">
+        <div class="feedback-container"></div>
+        <div class="invalid-feedback-container"></div>
+        <span class="invalid-amount"></span>
+        <span>
+            <span class="amount-feedback"></span>
+            <span class="percent-upload" style="display:none;">
+                <span class="percent-uploaded-bg"></span>
+                <span class="percent-uploaded-fg"></span>
+            </span>
+        </span>
+    </div>
+    <div class="verified-content import-status-container"></div>
+    <div class="invalid-content  invalid-import-view import-status-container"></div>
+    <div class="multi-match-content  invalid-import-view import-status-container"></div>
+    <div class="companies-content"></div>
+</div>

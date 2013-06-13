@@ -1,0 +1,226 @@
+<div class="content-container scroll-container">
+    <span class="account-notification-container"></span>
+    {{#if error}}<span class="error"> {{error}}</span> {{/if}}
+    <form class="email-form" method="POST">
+        <div class="email-container">
+            <form class="email-form" method="POST">
+
+                <div class="notification-desc-container">
+                    <div class="notification-title">DATAMINR FLASH</div>
+                    <div class="notification-desc">Select signals pertinent to a user’s Watchlist containing time-sensitive, potentially market-impacting information.</div>
+                </div>
+
+
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Flash Emails</label>
+                        </div>
+                        <div class="bundle-period-selector acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="regularEmailSettingsEnabled" name="regularEmailSettingsEnabled" class="onoff-toggle{{#if regularEmailSettingsEnabled}} on{{/if}} autosave" {{#if regularEmailSettingsEnabled}}checked="true"{{/if}} type="checkbox" />
+                                <div ></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Popup Notifications</label>
+                        </div>
+                        <div class="notification-popups acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="allowNotificationPopups" name="allowNotificationPopups" class="onoff-toggle{{#if allowNotificationPopups}} on{{/if}} autosave" {{#if allowNotificationPopups}}checked="true"{{/if}} type="checkbox" />
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="account-form-divider"></div>
+
+                <div class="notification-desc-container">
+                    <div class="notification-title">NOTABLE SIGNALS</div>
+                    <div class="notification-desc">Highlighted content pertinent to a user's Watchlist providing enhanced perspective and context around important stories.</div>
+                </div>
+
+               <!-- <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Digest Alerts</label>
+                        </div>
+                        <div class="acct-form-content digest-alerts-content">
+                            <div class="account-form-content-row">
+                                <input id="emailDigestSettingsListEnabled" name="emailDigestSettingsListEnabled" class="onoff-toggle{{#if emailDigestSettingsListEnabled}} on{{/if}} " {{#if emailDigestSettingsListEnabled}} checked="true"{{/if}} type="checkbox" />
+                            </div>
+                            <div class="account-form-content-row digest-checkboxes">
+                                <div class="digest-group">
+                                    <input id="premarket" name="preMarket" class="alert-checkbox" {{#if preMarket}}checked{{/if}} type="checkbox" />
+                                    <label for="premarket">Pre-Market Digest</label>
+                                    <div class="digest-exp">Trending stories since market close <br>(sent on weekdays at 7:00 AM EST)</div>
+                                </div>
+                                <div class="digest-group">
+                                    <input id="postmarket" name="postMarket" class="alert-checkbox" {{#if postMarket}}checked{{/if}} type="checkbox" />
+                                    <label for="postmarket">Market Close Digest</label>
+                                    <div class="digest-exp">Trending stories from the trading day <br>(sent on weekdays at 4:45 PM EST)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>-->
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Bundled Emails</label>
+                        </div>
+                        <div class="bundle-period-selector acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="bundledEmailSettingsEnabled" name="bundledEmailSettingsEnabled" class="onoff-toggle{{#if bundledEmailSettingsEnabled}} on{{/if}} autosave" {{#if bundledEmailSettingsEnabled}}checked="true"{{/if}} type="checkbox" />
+                            </div>
+                            <div class="account-form-content-row">
+                                <!--<div>Send every</div>-->
+                                <select name='bundledPeriod' class="bundle-opt autosave">
+                                    <option value="30" {{#if increment30}}selected{{/if}}>Every 30 mins</option>
+                                    <option value="60" {{#if increment60}}selected{{/if}}>Every 1 hr</option>
+                                    <option value="120" {{#if increment120}}selected{{/if}}>Every 2 hrs</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Popup Notifications</label>
+                        </div>
+                        <div class="endorsed-notification-popups acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="allowEndorsedNotificationPopups" name="allowEndorsedNotificationPopups" class="onoff-toggle{{#if allowNotificationPopups}} on{{/if}} autosave" {{#if allowEndorsedNotificationPopups}}checked="true"{{/if}} type="checkbox" />
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="account-form-divider"></div>
+
+                <div class="notification-desc-container">
+                    <div class="notification-title">IM Notifications</div>
+                    <div class="notification-desc">Stay up to date by sending Dataminr Flash and Notable Signals to your chat client</div>
+                </div>
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>IM</label>
+                        </div>
+                        <div class="im-settings-selector acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="imSettingsEnabled" name="imSettingsEnabled" class="onoff-toggle{{#if imSettingsEnabled}} on{{/if}} autosave" {{#if imSettingsEnabled}} checked="true"{{/if}} type="checkbox" />
+                            </div>
+                            <div class="account-form-content-row">
+                                <div class="im-error"></div>
+                                <div class="im-handle-container">
+                                    <div class="im-type-cont">
+                                        <select class="imType" name="imSettingsType">
+                                            {{#if imSettingsEnabled}}
+                                                {{#each imSettingsTypes}}
+                                                <option value="{{value}}" {{#if selected}}selected{{/if}}>{{name}}</option>
+                                                {{/each}}
+                                            {{/if}}
+                                        </select>
+                                    </div>
+
+                                    <div class="im-handle-cont">
+                                        <input type="text" class="im-handle" name="imSettingsHandle" placeholder="Username" {{#unless imSettingsEnabled}}disabled="disabled" {{/unless}} value="{{imSettingsHandle}}" />
+                                        <button class="im-save-btn" {{#unless imSettingsEnabled}}disabled="disabled" {{/unless}}>Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="account-form-content-row im-include-notable">
+                                <input id="imEndorsedEnabled" name="imEndorsedEnabled" class="autosave" {{#unless imSettingsEnabled}}disabled="disabled" {{/unless}}{{#if imEndorsedEnabled}} checked="true"{{/if}} type="checkbox" />
+                                Send me Notable Signals in addition to Dataminr Flash alerts
+                            </div>
+                        </div>
+                        <div class="aol-im-legal" style="display:none;">
+                            <div class="aol-legal-container">
+                                <div class="scroll-container-2">You acknowledge and agree that your use of the Dataminr, Inc. ("Dataminr") products and services ("Dataminr Products") is subject to (i) a separate written agreement between you (or the entity you represent) and Dataminr, and (ii) the additional terms and conditions applicable to certain third party materials set forth at <a href="https://app.dataminr.com/third-party-lic.html" target="_blank">https://app.dataminr.com/third-party-lic.html</a> (collectively, the "Agreement"). By accessing or using the Dataminr Products, you agree to be bound by the Agreement to the exclusion of all other terms.</div>
+                                <div class="button-cont">
+                                    <button class="aol-im-accept-btn">Agree to terms</button>
+                                    or
+                                    <button class="aol-im-cancel-btn">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="account-form-divider"></div>
+
+                <div class="notification-desc-container">
+                    <div class="notification-title">APPLICATION TOP EVENTS</div>
+                    <div class="notification-desc">Keep Dataminr Flashes and Notable Signals sticky at the top of the Dashboard. All signals will flow through chronologically if set to 'Off'.</div>
+                </div>
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Top Content</label>
+                        </div>
+                        <div class="notification-app acct-form-content">
+                            <div class="account-form-content-row">
+                                <input id="allowTopContent" name="allowTopContent" class="onoff-toggle{{#if allowTopContent}} on{{/if}} autosave" {{#if allowTopContent}}checked="true"{{/if}} type="checkbox" />
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+
+                <div class="account-form-divider"></div>
+
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label for="acct_email">Additional Email Address<span class="optional">(optional)</span></label>
+                        </div>
+                        <div class="acct-form-content">
+                            <input value="{{#if email2}}{{email2}}{{/if}}" class="form-input-container" id="acct_email2" name="acct_email2" type="text" />
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="account-form-group">
+                    <div class="account-form-field">
+                        <div class="acct-form-title">
+                            <label>Email Format</label>
+                        </div>
+                        <div class="email-format-selector acct-form-content">
+                            <div>Send emails as</div>
+                            <select name='acct_email_format'>
+                                <option value="0" {{#if emailformat0}}selected{{/if}}>Text</option>
+                                <option value="1" {{#if emailformat1}}selected{{/if}}>HTML</option>
+                            </select>
+                        </div>
+                        <button class="email-save-btn autosave">Save</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <!--<div class="account-notification-container" {{#if error}}style="display:block">{{error}}{{else}}>{{/if}}</div>-->
+
+                </div>
+            </form>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,14 @@
+{{> loader}}
+<div class="channel-content"></div>
+
+{{#if hasGeos}}
+<div class="geo-btn-container{{#if geosEnabled}} active{{/if}}">
+    <label>Geography<span class="paren">{{#if geosEnabled}} ({{geosEnabled}} currently enabled){{/if}}</span></label>
+    <button class="geo-btn" value="Geos">GO</button>
+</div>
+<div class="geo-popup-container"></div>
+{{/if}}
+
+{{#if icbLogo}}
+<img class="icb-logo" src="../../../assets/images/icb.png" />
+{{/if}}

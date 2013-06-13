@@ -1,0 +1,71 @@
+<div class="content-container scroll-container">
+    <div class="account-container">
+        {{#if fullName}}<div class="account-static-info">
+            {{fullName}} ({{username}})
+        </div>{{/if}}
+        <form class="account-form" method="POST">
+            <div class="account-form-group">
+                <div class="account-form-field">
+                    <div class="acct-form-title">
+                        <label for="acct_new_pass">Change Password</label>
+                    </div>
+                    <div class="acct-form-content">
+                        <div class="pwd-form-field">
+                            <input placeholder="Current Password" class="form-input-container"
+                                   id="acct_current_pass" name="acct_current_pass" type="password">
+                            <div class="error-message"></div>
+                        </div>
+                        <div style="height:1px;"></div>
+                        <div class="pwd-form-field">
+                            <input placeholder="New Password" class="form-input-container"
+                                   id="acct_new_pass" name="acct_new_pass" type="password">
+                            <div class="error-message"></div>
+                        </div>
+                        <div class="pwd-form-field">
+                            <input placeholder="Confirm New Password" class="form-input-container"
+                                   id="acct_new_pass_confirm" name="acct_new_pass_confirm" type="password">
+                            <div class="error-message"></div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="account-form-group">
+                <div class="account-form-field">
+                    <div class="acct-form-title">
+                        <label class="vacation-title">Vacation Settings <span class="paren">{{#if vacationDate}}(Enabled){{else}}(Disabled){{/if}}</span></label>
+                    </div>
+                    <div class="acct-form-content">
+                        <div>Do not send me emails until</div>
+                        <input name="vacation-date" id="vacation-date" type="date" name="vacation-date" placeholder="yyyy-mm-dd" value="{{#if vacationDate}}{{vacationDate}}{{else}}yyyy-mm-dd{{/if}}" />
+                        <button type="button" id="vacation-enable" class="settings-btn-2">Apply</button>
+                        <button type="button" id="vacation-disable" class="settings-btn-2">Disable</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+            <div class="account-form-group">
+                <div class="account-form-field">
+                    <div class="acct-form-title">
+                        <label class="vacation-title">Time Zone</div>
+                    <div class="acct-form-content">
+                        <div class="field-row {{type}}">
+                            <select class="select-input input" name="timezone">
+                                {{#each timezones}}
+                                <option value="{{id}}" {{#if selected}}selected="selected"{{/if}}>{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div class="account-notification-container" {{#if error}}style="display:block">{{error}}{{else}}>{{/if}}</div>
+            <input type="submit" value="SAVE" class="settings-btn" />
+        </form>
+    </div>
+</div>
+<div class="disclaimer third-party-agr">
+    <a href="/third-party-lic.html" target="_blank">Third Party Terms, Conditions and Notices</a>
+</div>

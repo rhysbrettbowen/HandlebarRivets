@@ -1,0 +1,21 @@
+<h3>{{title}}</h3>
+<div class="alert-types-cont">
+    <div class="{{type}}-{{category}} dm-sourced alert-category {{sourcedEnabledState}}">
+        <div class="filter-row-heading">
+            <input id="{{type}}-{{category}}-sourced" class="top-alert-checkbox dm-sourced" type="checkbox" {{#if sourcedSelected}}checked="checked" {{/if}}/>
+            <label class="alert-label" for="{{type}}-{{category}}-sourced">Sourced</label>
+            <div class="sf-srcd filter-selection-desc">{{{ sourcedSelectedTypes }}}</div>
+            <div class="advanced-alert-type-btn sourced"></div>
+        </div>
+        <div class="expanded-srcd-container" {{#if sourcedHidden}}style="display:none;"{{/if}}></div>
+    </div>
+    <div class="{{type}}-{{category}} off-the-radar alert-category {{otrEnabledState}}">
+        <div class="filter-row-heading">
+            <input id="{{type}}-{{category}}-otr" class="top-alert-checkbox off-the-radar" type="checkbox" {{#if otrSelected}}checked="checked" {{/if}}/>
+            <label class="alert-label" for="{{type}}-{{category}}-otr">Off the Radar</label>
+            <div class="sf-otr filter-selection-desc">{{{ otrSelectedTypes }}}</div>
+            <div class="advanced-alert-type-btn otr"></div>
+        </div>
+        <div class="expanded-otr-container" {{#if otrHidden}}style="display:none;"{{/if}}></div>
+    </div>
+</div>

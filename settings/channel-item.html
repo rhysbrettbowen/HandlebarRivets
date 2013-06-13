@@ -1,0 +1,10 @@
+
+    <input id="{{id}}" type="checkbox" class="channelCheckbox" checked="{{enabled}}"/>
+    <label for="{{id}}" class="channelName {{#if enabled}}active{{/if}}">{{name}}</label>
+
+    <input id="{{id}}" type="checkbox" class="channelCheckbox"/>
+    <label for="{{id}}" class="channelName">{{name}}</label>
+
+{{#if children}}
+    <div class="{{cid}}-child-container channel-child"></div>
+{{/if}}

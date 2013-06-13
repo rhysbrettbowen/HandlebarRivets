@@ -1,0 +1,47 @@
+<div class="intro">Please fill in the following fields to proceed</div>
+<div class="feedback"></div>
+<form class="required-pref-form">
+    <div class="role-container">
+        <div class="select-input">
+            <label for="role">User Role</label>
+            <select id='role' class="role-opt">
+                <option value="Portfolio Manager">Portfolio Manager</option>
+                <option value="Analyst">Analyst</option>
+                <option value="Trader">Trader</option>
+                <option value="Salestrader">Salestrader</option>
+                <option value="Sector Specialist">Sector Specialist</option>
+                <option value="Research Sales">Research Sales</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="other-role-container text-input" style="display:none;">
+            <label for="other-role">Other:</label>
+            <input id="other-role" class="form-input-container" width="450"/>
+        </div>
+    </div>
+
+    <div class="interest-sectors cf">
+        <div class="require-question">Which sectors would you like to focus on?</div>
+    {{#each sectors}}
+        <div class="interest-row checkbox-input">
+            <input type="checkbox" class="user-type-checkbox" value="{{name}}" />{{name}}<br />
+        </div>
+    {{/each}}
+    </div>
+    <div class="legal-terms scroll-container">
+        You acknowledge and agree that your use of the Dataminr, Inc. (“Dataminr”) products and
+        services (“Dataminr Products”) is subject to (i) a separate written agreement between you (or
+        the entity you represent) and Dataminr, and (ii) the additional terms and conditions applicable
+        to certain third party materials set forth at <a href="third-party-lic.html" target="_blank">https://app.dataminr.com/third-party-lic.html</a>
+        (collectively, the “Agreement”). By accessing or using the Dataminr Products, you agree to be
+        bound by the Agreement to the exclusion of all other terms.
+    </div>
+    <div class="agree-to-master-terms checkbox-input">
+        <input type="checkbox" class="master-terms-checkbox" />
+        <label class="checkbox-label agree-check">I agree to the above terms.</label><br />
+    </div>
+    <div class="button-container">
+        <button class="save-btn settings-btn" disabled="disabled">Save</button>
+    </div>
+    <div style="clear:both"></div>
+</form>

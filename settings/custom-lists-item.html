@@ -1,0 +1,13 @@
+<div class="list-item-buttons">
+    <span class="list-color-container no-click-catch">
+    {{#if canModifyColor}}
+        <span class="list-color no-click-catch"></span>
+    {{/if}}
+    </span>
+    <span class="date">{{date}}</span>
+    <span class="sources">{{sources}}</span>
+    {{#if canBeRemoved}}<span class="delete-btn-cont no-click-catch"><a class="delete-btn no-click-catch">x</a></span>{{/if}}
+</div>
+<div class="list-item-content">
+    <span class="list-name">{{{name}}}</span>
+</div>
