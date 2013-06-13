@@ -1,1 +1,93 @@
-<ul>{{#each test}}<li>{{a}} or {{#if c}}{{b}} not{{/if}} {{this}}</li>{{/each}}</ul>
+<div class="stream-message cf">
+    <div class="stream-time">{{displayTime}}</div>
+    <div class="short-criteria"></div>
+
+    <div data-cid="{{cid}}" class="stream-msg title-msg"><span class="minified-type-id" style="color:{{fontColor}};"
+                                                               title="{{filterType}}">{{filterTypeAbbr}}:</span>
+        {{#if translatedFrom}}<span class="translated-icon"></span>{{/if}}
+        {{{titleText}}}
+    </div>
+
+    {{#if hasLink}}
+    <div class="stream-links {{#if hasMultiLinks}}multi-link{{/if}} "><span class="stream-link"></span>
+
+        <div class="links-expanded"> {{#if hasSingleLink}} {{#each links}} {{{link}}} {{/each}} {{else}} {{#if hasMultiLinks}}
+            <div class="qual-links"> {{#if links}} {{#each links}} {{{link}}} {{/each}} {{/if}}</div>
+            {{/if}} {{/if}}
+        </div>
+
+    </div>
+    {{/if}}
+    <div class="stream-qualifiers {{typeClass}}">
+        <div class="stream-type "><span class="abbr">{{filterTypeAbbr}}</span> <span
+                class="full">{{filterType}}</span>
+
+            <div class="stream-type-overlay"></div>
+        </div>
+    </div>
+</div>
+{{#if isNew}}
+<div class="newShiv"></div>
+{{/if}}
+
+
+<div class="expanded-content cf">
+    {{#if hasGraph}}
+    <div class="detail-content-section">
+        <h4>MESSAGE GRAPH</h4>
+        <div class="graph-section"></div>
+    </div>
+    {{/if}}
+    <div class="detail-content-section cf">
+        <div class="alert-meta">
+            <div  class="user-detail-section">
+                <div class="user-detail-content">
+                    <div class="user-titles">
+                        <div class="stream-qualifiers {{typeClass}}">
+                            <div class="stream-type" style="color: {{fontColor}}">
+                                <span class="full">{{filterType}}</span>
+                            </div>
+                        </div>
+                        <span>@{{#if rtScreenName}}{{rtScreenName}}{{else}}{{screenName}}{{/if}}</span>
+                    </div>
+                    <div class="user-stats cf">
+                        <div class="user-stats-elmt">
+                            <div class="user-stats-elmt-ct">{{#if rtTweetCt}}{{rtTweetCt}}{{else}}{{userTweetCt}}{{/if}}</div>
+                            <div class="elmt-name">TWEETS</div>
+                        </div>
+                        <div class="user-stats-elmt">
+                            <div class="user-stats-elmt-ct">{{#if rtFollowerCt}}{{rtFollowerCt}}{{else}}{{userFollowerCt}}{{/if}}</div>
+                            <div class="elmt-name">FOLLOWERS</div>
+                        </div>
+                    </div>
+                    <div class="user-description"><strong>Description:</strong> {{#if rtUserDescription}}{{rtUserDescription}}{{else}}{{userDescription}}{{/if}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="alert-info">
+            <div class="expanded-title-msg">
+                {{#if translatedFrom}}<span class="translated-icon"></span>{{/if}}
+                {{{titleText}}}
+                <span><a class="email-icon" href="{{emailLink}}" target="_blank"></a></span>
+            </div>
+
+            {{#if rtScreenName}}
+            <div class="sample">Original message from <span class="screen-name"><a style="color:{{fontColor}}" target="_self" href="#/search/@{{rtScreenName}}">@{{rtScreenName}}</a></span> {{rtMessageCreationTime}}
+            </div>
+            {{/if}}
+            {{#if screenName}}
+            <div class="retweet-sample">{{#if rtScreenName}}Sent by {{else}}Original message from {{/if}}<span
+                    class="screen-name"><a style="color:{{fontColor}}" class="internal-link" target="_self"
+                                           href="#/search/@{{screenName}}">@{{screenName}}</a></span> {{
+                messageCreationTime}}
+            </div>
+            {{/if}}
+            <div class="stream-msg full-msg">{{#if translatedFrom}}<span class="translated-icon">Translated from {{translatedFrom}}:</span>
+                {{{rawText}}} {{else}} {{{text}}} {{/if}}
+            </div>
+            <div class="parsed-link-section"></div>
+            <a class="collapse-row">Collapse</a>
+        </div>
+    </div>
+</div>
+

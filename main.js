@@ -26,15 +26,15 @@ custFN = 0;
 var parseHtml = function(str) {
 	str = cleanString(str);
 	var head = buildTree(str);
-	// console.log('########## first pass tree ##########');
-	// printTree(head);
+	console.log('########## first pass tree ##########');
+	printTree(head);
 	cleanTree(head);
-	// console.log('\n\n########## cleaned tree ##########\n\n');
-	// printTree(head);
-	// console.log(attrFn(head.children[0].attrs[0]));
+	console.log('\n\n########## cleaned tree ##########\n\n');
+	printTree(head);
+	console.log(attrFn(head.children[0].attrs[0]));
 	transformBindings(head);
-	// console.log('\n\n########## finished tree ##########\n\n');
-	// printTree(head);
+	console.log('\n\n########## finished tree ##########\n\n');
+	printTree(head);
 	return head;
 };
 
@@ -252,7 +252,7 @@ var addBindForOnlyTempate = function(node) {
       node.children.length == 1 &&
       node.children[0] instanceof TemplateNode) {
     var el = node.parent.parent;
-    var attr = new AttributeNode('data-attr-' + node.parent.val);
+    var attr = new AttributeNode('data-' + node.parent.val);
     var temp = [];
     for (var i = 0; i < el.attrs.length; i++) {
       if (el.attrs[i] != node.parent)
@@ -845,7 +845,7 @@ var attrFn = function(node) {
 		  }, []);
 		  var fnName = addToCustom(fnInternal, req.map(function(a) {return a.replace(/^this\.?/, '');}));
 		  node.children[0].children = [new TextNode('c:' + fnName + ' <' + req.map(function(prop) {return ' ' + (prop.match(/this\.?/) ?  prop: (isInEach(node) ? 'this.' : 'm.') + prop);}).join(''))];
-		  node.val = 'data-attr-' + node.val;
+		  node.val = 'data-' + node.val;
 		})
 	};
 };
@@ -882,17 +882,16 @@ var printQS = function(node, required, inEach) {
 		if (!(node.parent instanceof TemplateNode)) {
 			val = '"' + val + '"';
 		} else {
-			if (!inEach){
-				if (isInEach(node)) {
-					if (node.val == 'this') {
-						val = 'that';
-						required.push(node.val);
-					} else {
-						required.push('this.' + node.val);
-					}
+			if (isInEach(node)) {
+				if (node.val == 'this') {
+					val = 'that';
+					required.push(node.val);
 				} else {
-					required.push(keypath + node.val);
+					val = 'that.'+val;
+					required.push('this.' + node.val);
 				}
+			} else {
+				required.push(keypath + node.val);
 			}
 		}
 		return val;
@@ -914,7 +913,7 @@ var printQS = function(node, required, inEach) {
 			required.push(node.test);
 		}
 		var arr = resolvePath(keypath, node.test);
-		return arr + '.map(function(item){return ' +
+		return arr + '.map(function(that){return ' +
 			node.children.reduce(function(memo, node) {
 				return memo.push(printQS(node, required, true, arr)), memo;
 			}, ['""']).join("+") +
@@ -933,7 +932,7 @@ var printFull = function(node) {
 	depthFirst(node, handleComputedNodes);
 	var str = 'getTemplate = (function(){var c={';
 	for (i in custom) {
-		str += i + ':' + custom[i] + ',';
+		str += i + ':' + custom[i] + ',\n';
 	}
 	str = str.replace(/,$/, '');
 	str += '};n=document.createElement("div"),f=document.createDocumentFragment();n.innerHTML="' +
